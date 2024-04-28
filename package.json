@@ -2,6 +2,7 @@
   "name": "project1",
   "version": "1.0.0",
   "main": "index.js",
+  "author": "Md. Shariful Islam",
   "scripts": {
     "start:dev": "nodemon ./dist/server.js"
   },
