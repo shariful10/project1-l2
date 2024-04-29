@@ -1,15 +1,23 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 const app = express();
-const port = 3000;
 
 // parsers
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
+// routers
+
+const userRouter = express.Router();
+
+const logger = (req: Request, res: Response, next: NextFunction) => {
+	console.log(req.url, req.method, req.hostname);
+	next();
+};
+
+app.get("/", logger, (req: Request, res: Response) => {
 	res.send("Hello from World!");
 });
 
-app.post("/", (req: Request, res: Response) => {
+app.post("/", logger, (req: Request, res: Response) => {
 	console.log(req.body);
 	res.json({
 		message: "Successfully recivied data",
