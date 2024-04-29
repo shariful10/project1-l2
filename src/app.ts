@@ -34,22 +34,21 @@ courseRouter.post("/create-course", (req: Request, res: Response) => {
 	});
 });
 
-// global error handler
-
-app.all("*", (req: Request, res: Response) => {
-	res.status(400).json({
-		success: false,
-		message: "Not found",
-	});
-});
-
 const logger = (req: Request, res: Response, next: NextFunction) => {
 	console.log(req.url, req.method, req.hostname);
 	next();
 };
 
-app.get("/", logger, (req: Request, res: Response) => {
-	res.send("Hello from World!");
+app.get("/", logger, (req: Request, res: Response, next: NextFunction) => {
+	try {
+		res.send("Hello from World!");
+	} catch (error) {
+		next(error);
+		// res.status(400).json({
+		// 	success: false,
+		// 	message: "Faild to get data",
+		// });
+	}
 });
 
 app.post("/", logger, (req: Request, res: Response) => {
@@ -57,6 +56,23 @@ app.post("/", logger, (req: Request, res: Response) => {
 	res.json({
 		message: "Successfully recivied data",
 	});
+});
+
+app.all("*", (req: Request, res: Response) => {
+	res.status(400).json({
+		success: false,
+		message: "Route is not found",
+	});
+});
+
+// global error handler
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+	if(error){
+    res.status(400).json({
+      status: false,
+      message: "Something went wrong"
+    })
+  };
 });
 
 export default app;
