@@ -42,12 +42,8 @@ const logger = (req: Request, res: Response, next: NextFunction) => {
 app.get("/", logger, (req: Request, res: Response, next: NextFunction) => {
 	try {
 		res.send("Hello from World!");
-	} catch (error) {
-		next(error);
-		// res.status(400).json({
-		// 	success: false,
-		// 	message: "Faild to get data",
-		// });
+	} catch (err) {
+		next(err);
 	}
 });
 
@@ -66,13 +62,13 @@ app.all("*", (req: Request, res: Response) => {
 });
 
 // global error handler
-app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-	if(error){
-    res.status(400).json({
-      status: false,
-      message: "Something went wrong"
-    })
-  };
+app.use((err: any, req: Request, res: Response, next: NextFunction) => {
+	if (err) {
+		res.status(400).json({
+			status: false,
+			message: "Something went wrong",
+		});
+	}
 });
 
 export default app;
